@@ -29,10 +29,10 @@ class NeuralNetwork(object):
         self.num_classes=num_classes
         self.seed = seed
         
-        np.seed(self.seed)
+        np.random.seed(self.seed)
         
         self.weights = pd.DataFrame([np.random.uniform(-1, 1, size=self.input_size+1)
-                        for i in self.num_classes])
+                        for i in range(self.num_classes)])
         ###################################################################
 
     def forward(self, X: npt.ArrayLike) -> npt.ArrayLike:

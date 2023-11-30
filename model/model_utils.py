@@ -45,7 +45,7 @@ def labels_matrix(data: Tuple[List[str], Set[str]]) -> pd.DataFrame:
     classes = data[1]
     
     matrix = pd.DataFrame(np.zeros((len(classes), len(items))),
-                                index=dict(classes).keys)
+                                index=list(classes))
     
     for i, label in enumerate(items):
         matrix.loc[label][i] += 1 
