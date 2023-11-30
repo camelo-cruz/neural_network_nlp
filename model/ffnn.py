@@ -1,4 +1,5 @@
 import numpy as np
+import pandas as pd
 import numpy.typing as npt
 
 from model.model_utils import softmax, relu, relu_prime
@@ -16,13 +17,22 @@ class NeuralNetwork(object):
         """
         Initialize neural network's weights and biases.
         """
+
         ############################# STUDENT SOLUTION ####################
         # YOUR CODE HERE
         #     TODO:
         #         1) Set a seed so that your model is reproducible
         #         2) Initialize weight matrices and biases with uniform
         #         distribution in the range (-1, 1).
-        pass
+        self.input_size= input_size
+        self.hidden_size=hidden_size
+        self.num_classes=num_classes
+        self.seed = seed
+        
+        np.seed(self.seed)
+        
+        self.weights = pd.DataFrame([np.random.uniform(-1, 1, size=self.input_size+1)
+                        for i in self.num_classes])
         ###################################################################
 
     def forward(self, X: npt.ArrayLike) -> npt.ArrayLike:
@@ -34,7 +44,7 @@ class NeuralNetwork(object):
         # YOUR CODE HERE
         #     TODO:
         #         1) Perform only a forward pass with X as input.
-        pass
+        return None
         #####################################################################
 
     def predict(self, X: npt.ArrayLike) -> npt.ArrayLike:
