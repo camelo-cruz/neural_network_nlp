@@ -7,7 +7,7 @@ from nltk.tokenize import word_tokenize
 from typing import Tuple, List, Set
 
 
-def bag_of_words_matrix(sentences: List[str]) -> pd.DataFrame:
+def bag_of_words_matrix(sentences: List[str]) -> npt.ArrayLike:
     """
     Convert the dataset into V x M matrix.
     """
@@ -31,24 +31,30 @@ def bag_of_words_matrix(sentences: List[str]) -> pd.DataFrame:
         for word in sentence:
             bag_of_words.loc[word][i] += 1 
     
+    
+    bag_of_words = np.array(bag_of_words)
+    
+    bag_of_words = np.insert(bag_of_words, 0, np.ones(bag_of_words.shape[1]), axis=0)
+    
     return bag_of_words
     #########################################################################
 
 
-def labels_matrix(data: Tuple[List[str], Set[str]]) -> pd.DataFrame:
+def labels_matrix(data: Tuple[List[str], Set[str]]) -> npt.ArrayLike:
     """
     Convert the dataset into K x M matrix.
     """
     ############################# STUDENT SOLUTION ##########################
     # YOUR CODE HERE
     items = data[0]
-    classes = data[1]
+    classes = list(data[1])
     
-    matrix = pd.DataFrame(np.zeros((len(classes), len(items))),
-                                index=list(classes))
-    
+    matrix = []
+
     for i, label in enumerate(items):
-        matrix.loc[label][i] += 1 
+        matrix.append(np.eye(len(classes))[classes.index(label)])
+    
+    matrix = np.array(matrix).T
     
     return matrix
     #########################################################################
@@ -60,7 +66,7 @@ def softmax(z: npt.ArrayLike) -> npt.ArrayLike:
     """
     ############################# STUDENT SOLUTION ##########################
     # YOUR CODE HERE
-    return np.exp(z) / np.sum(np.exp(z))
+    return np.exp(z) / np.sum(np.exp(z), axis=0)
     #########################################################################
 
 

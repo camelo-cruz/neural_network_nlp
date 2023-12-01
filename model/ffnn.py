@@ -31,7 +31,10 @@ class NeuralNetwork(object):
         
         np.random.seed(self.seed)
         
-        self.weights = pd.DataFrame([np.random.uniform(-1, 1, size=self.input_size+1)
+        self.W1 = np.array([np.random.uniform(-1, 1, size=self.input_size)
+                        for i in range(self.hidden_size)])
+        
+        self.W_out = np.array([np.random.uniform(-1, 1, size=self.hidden_size)
                         for i in range(self.num_classes)])
         ###################################################################
 
@@ -44,7 +47,20 @@ class NeuralNetwork(object):
         # YOUR CODE HERE
         #     TODO:
         #         1) Perform only a forward pass with X as input.
-        return None
+        
+        # index_list = list(X.index)
+        # index_list.insert(0, 'bias')
+        # X = X.reindex(index_list)
+        # X.loc['bias'] = 1
+        
+        z = np.dot(self.W1, X)
+        H = relu(z)
+        
+        z_1 = np.dot(self.W_out, H)
+        O = softmax(z_1)
+        
+        
+        return H, O
         #####################################################################
 
     def predict(self, X: npt.ArrayLike) -> npt.ArrayLike:
@@ -58,7 +74,15 @@ class NeuralNetwork(object):
         #         `self.forward()` function. The shape of prediction matrix
         #         should be similar to label matrix produced with
         #         `labels_matrix()`
-        pass
+        
+        H, output = self.forward(X)
+        predictions = np.zeros((self.num_classes, output.shape[1]))
+        for column in range(output.shape[1]):
+            index = np.argmax(output[:, column])
+            one_hot_prediction = np.eye(self.num_classes)[index]
+            predictions[:, column]= one_hot_prediction
+            
+        return predictions
         ######################################################################
 
     def backward(
@@ -75,7 +99,18 @@ class NeuralNetwork(object):
         #         1) Perform forward pass, then backpropagation
         #         to get gradient for weight matrices and biases
         #         2) Return the gradient for weight matrices and biases
-        pass
+        
+        
+        m = X.shape[1]
+        
+        H, O = self.forward(X)
+        d_L = O - Y
+        dW2 = np.dot(d_L, H.T) / m
+        d_l = np.dot(self.W_out.T, d_L) * relu_prime(H)
+        dW1 = np.dot(d_l, X.T) / m
+        
+        return dW1, dW2
+
         #######################################################################
 
 
@@ -88,5 +123,7 @@ def compute_loss(pred: npt.ArrayLike, truth: npt.ArrayLike) -> float:
     #     TODO:
     #         1) Compute the cross entropy loss between your model prediction
     #         and the ground truth.
-    pass
+    epsilon = 1e-15
+    pred = np.clip(pred, epsilon, 1 - epsilon)
+    return -np.sum(truth * np.log(pred), axis=0).mean()
     #######################################################################
