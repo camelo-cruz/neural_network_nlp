@@ -63,6 +63,7 @@ def minibatch_train(X, Y, model, train_flag=False):
         batch_size = 64
         for i in range(1000):
             #Calculating gradient with backpropagation and uploading weights
+            #with minibatch
             for minibatch in create_minibatch(X, Y, batch_size):
                 minibatch_X, minibatch_Y = minibatch
                 dW1, dW2 = model.backward(minibatch_X, minibatch_Y)
