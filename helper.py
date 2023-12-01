@@ -1,5 +1,4 @@
 import numpy as np
-from tqdm import tqdm
 from model.ffnn import NeuralNetwork, compute_loss
 
 
@@ -18,6 +17,7 @@ def batch_train(X, Y, model, train_flag=False):
     #         3) Then, plot the cost function for each iteration and
     #         compare the results after training with results before training
     
+    #Here I am calculating accuracy with no training at all
     preds = model.predict(X)
     num_columns = Y.shape[1]
     equal_columns = [1 for index in range(num_columns) 
@@ -28,12 +28,17 @@ def batch_train(X, Y, model, train_flag=False):
             
     if train_flag:
         for i in range(1000):
+            #Calculating gradient with backpropagation and uploading weights
             dW1, dW2 = model.backward(X, Y)
-            model.W1 -= 0.005 * dW1
-            model.W_out -= 0.005 * dW2
+            model.W1 -= 0.005 * dW1 #for hidden layer
+            model.W_out -= 0.005 * dW2 #for ouput layer
             
+            
+            #Computing metrics for evaluation
+            #Computing loss
             H, O = model.forward(X)
             loss = compute_loss(O, Y)
+            #Computing accuracy
             preds = model.predict(X)
             
             num_columns = Y.shape[1]
@@ -57,15 +62,18 @@ def minibatch_train(X, Y, model, train_flag=False):
     if train_flag:
         batch_size = 64
         for i in range(1000):
+            #Calculating gradient with backpropagation and uploading weights
             for minibatch in create_minibatch(X, Y, batch_size):
                 minibatch_X, minibatch_Y = minibatch
                 dW1, dW2 = model.backward(minibatch_X, minibatch_Y)
-                model.W1 -= 0.005 * dW1
-                model.W_out -= 0.005 * dW2
+                model.W1 -= 0.005 * dW1 #for hidden layer
+                model.W_out -= 0.005 * dW2 #for ouput layer
                 
+            #Computing metrics for evaluation
+            #Computing loss
             H, O = model.forward(X)
             loss = compute_loss(O, Y)
-            
+            #Computing accuracy
             preds = model.predict(X)
             num_columns = Y.shape[1]
             equal_columns = [1 for index in range(num_columns) 

@@ -1,5 +1,4 @@
 import argparse
-import numpy as np
 
 from utils import load_dataset
 from model.model_utils import bag_of_words_matrix, labels_matrix
@@ -36,10 +35,11 @@ def main():
     #         1) Convert the sentences and intent to matrices using
     #         `bag_of_words_matrix()` and `labels_matrix()`.
     #         2) Initiallize the model Class with the appropriate parameters
+
     X = bag_of_words_matrix(sentences)
     Y = labels_matrix((intent, unique_intent))
     model = NeuralNetwork(input_size=X.shape[0], hidden_size=150, 
-                          num_classes=Y.shape[0])
+                          num_classes=Y.shape[0], seed=41)
     ##################################################################
 
     if not args.minibatch:
@@ -51,13 +51,4 @@ def main():
 
 
 if __name__ == "__main__":
-    # sentences, intent, unique_intent = load_dataset(DATA_PATH)
-
-    #
-    # Y = labels_matrix((intent, unique_intent))
-    # model = NeuralNetwork(input_size=X.shape[0], hidden_size=150, 
-    #                         num_classes=Y.shape[0])
-
-    # batch_train(X, Y, model, train_flag=True)
-    # minibatch_train(X, Y, model, train_flag=True)
     main()

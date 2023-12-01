@@ -1,5 +1,4 @@
 import numpy as np
-import pandas as pd
 import numpy.typing as npt
 
 from model.model_utils import softmax, relu, relu_prime
@@ -123,7 +122,5 @@ def compute_loss(pred: npt.ArrayLike, truth: npt.ArrayLike) -> float:
     #     TODO:
     #         1) Compute the cross entropy loss between your model prediction
     #         and the ground truth.
-    epsilon = 1e-15
-    pred = np.clip(pred, epsilon, 1 - epsilon)
     return -np.sum(truth * np.log(pred), axis=0).mean()
     #######################################################################
