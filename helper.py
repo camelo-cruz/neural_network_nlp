@@ -68,7 +68,7 @@ def minibatch_train(X, Y, model, train_flag=False):
                 dW1, dW2 = model.backward(minibatch_X, minibatch_Y)
                 model.W1 -= 0.005 * dW1 #for hidden layer
                 model.W_out -= 0.005 * dW2 #for ouput layer
-                
+
             #Computing metrics for evaluation
             #Computing loss
             H, O = model.forward(X)
@@ -83,7 +83,7 @@ def minibatch_train(X, Y, model, train_flag=False):
             
     #########################################################################
 
-def create_minibatch(X, Y, batch_size=64):
+def create_minibatch(X, Y, batch_size):
     indices = np.arange(X.shape[0])
     np.random.shuffle(indices)
     for i in range(0, X.shape[0] - batch_size + 1, batch_size):
