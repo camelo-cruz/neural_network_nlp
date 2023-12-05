@@ -74,40 +74,18 @@ def minibatch_train(X, Y, model, train_flag=False):
     
     
     if train_flag:
+        loss_minibatch, acc_minibatch, iter_minibatch = batch_train(X, Y, model, 
+                                                        train_flag=True, batch_size=64)
+        
+        
+        #create another new model (with not trained weights)for SGD and train
         SGD_model = NeuralNetwork(model.input_size, model.hidden_size, 
                                   model.num_classes, model.seed)
         
         loss_SGD, acc_SGD, iter_SGD = batch_train(X, Y, SGD_model, 
                                                         train_flag=True, batch_size=1)
+        #---------------------------------------------------------------------
         
-        loss_to_print = []
-        acc_to_print = []
-        iter_minibatch = 0
-        for i in range(1000):
-            #Calculating gradient with backpropagation and uploading weights
-            #with minibatch
-            for minibatch in create_minibatch(X, Y, batch_size=64):
-                iter_minibatch += 1
-                minibatch_X, minibatch_Y = minibatch
-                dW1, dW2 = model.backward(minibatch_X, minibatch_Y)
-                model.W1 -= 0.005 * dW1 #for hidden layer
-                model.W_out -= 0.005 * dW2 #for ouput layer
-
-            #Computing metrics for evaluation
-            #Computing loss
-            H, O = model.forward(X)
-            loss = compute_loss(O, Y)
-            #Computing accuracy
-            preds = model.predict(X)
-            num_columns = Y.shape[1]
-            equal_columns = [1 for index in range(num_columns) 
-                             if np.all(preds[:, index] == Y[:, index], axis=0)]
-            accuracy = np.sum(equal_columns) / num_columns
-            
-            loss_to_print.append(loss)
-            acc_to_print.append(accuracy)
-            
-            print(f'epoch {i+1}: model loss {loss}, model accuracy {accuracy}')
         
         plt.figure(figsize=(18, 6))
         
@@ -122,7 +100,7 @@ def minibatch_train(X, Y, model, train_flag=False):
         
 
         plt.subplot(1, 3, 2)
-        plt.plot(loss_to_print, label='Mini-Batch Training')
+        plt.plot(loss_minibatch, label='Mini-Batch Training')
         plt.plot(loss_SGD, label='SGD Training')
         plt.xlabel('Epoch')
         plt.ylabel('Loss')
@@ -131,7 +109,7 @@ def minibatch_train(X, Y, model, train_flag=False):
         
 
         plt.subplot(1, 3, 3)
-        plt.plot(acc_to_print, label='Mini-Batch Training')
+        plt.plot(acc_minibatch, label='Mini-Batch Training')
         plt.plot(acc_SGD, label='SGD Training')
         plt.xlabel('Epoch')
         plt.ylabel('Accuracy')
