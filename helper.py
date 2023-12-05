@@ -59,7 +59,7 @@ def batch_train(X, Y, model, train_flag=False, batch_size=None):
             
             print(f'epoch {i+1}: model loss {loss}, model accuracy {accuracy}')
     
-    return loss_to_print, acc_to_print, iter_batch
+        return loss_to_print, acc_to_print, iter_batch
     ###############################################################################
 
 
@@ -71,13 +71,15 @@ def minibatch_train(X, Y, model, train_flag=False):
     #         and SGD (batch size = 1) for 1000 epochs using learning rate
     #         = 0.005. Then, plot the cost vs iteration for both cases.
     
-    SGD_model = NeuralNetwork(model.input_size, model.hidden_size, 
-                              model.num_classes, model.seed)
     
-    loss_SGD, acc_SGD, iter_SGD = batch_train(X, Y, SGD_model, 
-                                                    train_flag=True, batch_size=1)
     
     if train_flag:
+        SGD_model = NeuralNetwork(model.input_size, model.hidden_size, 
+                                  model.num_classes, model.seed)
+        
+        loss_SGD, acc_SGD, iter_SGD = batch_train(X, Y, SGD_model, 
+                                                        train_flag=True, batch_size=1)
+        
         loss_to_print = []
         acc_to_print = []
         iter_minibatch = 0
