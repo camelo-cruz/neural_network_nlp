@@ -58,6 +58,36 @@ def batch_train(X, Y, model, train_flag=False, batch_size=None):
             acc_to_print.append(accuracy)
             
             print(f'epoch {i+1}: model loss {loss}, model accuracy {accuracy}')
+            
+        
+        plt.figure(figsize=(18, 6))
+        
+        plt.subplot(1, 3, 1)
+        bars = plt.bar('iterations batch', iter_batch)
+        for bar in bars:
+            yval = bar.get_height()
+            plt.text(bar.get_x() + bar.get_width()/2, yval, round(yval, 2), ha='center', va='bottom')
+            
+        plt.ylabel('Number of Iterations')
+        plt.title('Number of Iterations')
+        
+
+        plt.subplot(1, 3, 2)
+        plt.plot(loss_to_print, label='Loss')
+        plt.xlabel('Epoch')
+        plt.ylabel('Loss')
+        plt.title(f'Cost vs Epoch batch size {batch_size}')
+        
+        
+        plt.subplot(1, 3, 3)
+        plt.plot(acc_to_print, label='accuracy')
+        plt.xlabel('Epoch')
+        plt.ylabel('Accuracy')
+        plt.title(f'Accuracy vs Epoch batch size{batch_size}')
+        plt.legend()
+        
+        plt.tight_layout()
+        plt.savefig(f'plots/training_batchsize_{batch_size}.png')
     
         return loss_to_print, acc_to_print, iter_batch
     ###############################################################################
@@ -125,8 +155,7 @@ def minibatch_train(X, Y, model, train_flag=False):
         plt.legend()
         
         plt.tight_layout()
-        plt.savefig('plots/SGD_minibatch.png')
-        plt.show()
+        plt.savefig('plots/SGD_vs_minibatch.png')
         
         
             
