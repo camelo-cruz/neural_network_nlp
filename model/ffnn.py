@@ -109,7 +109,12 @@ class NeuralNetwork(object):
         dW1 = np.dot(d_l, X.T) / m
         
         return dW1, dW2
-
+    
+        #------------------------Discussion---------------------------------
+        # The backpropagation has indeed decreased the value of the loss function
+        # making use of the derivatives for optimizing the weight values both in the hidden and
+        # output layer.
+        #-------------------------------------------------------------------
         #######################################################################
 
 

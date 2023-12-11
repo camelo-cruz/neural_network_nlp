@@ -71,7 +71,15 @@ def minibatch_train(X, Y, model, train_flag=False):
     #         and SGD (batch size = 1) for 1000 epochs using learning rate
     #         = 0.005. Then, plot the cost vs iteration for both cases.
     
-    
+    #------------------------Discussion---------------------------------
+    # Mini-batch and SGD traning worked significantly better than batch training
+    # as there were more weight updates than in batch training (only one update per epoch)
+    # while seein the whole dataset. Mini-batch training and SGD introduce also 
+    # randomness while seeing only (randomized) parts of the dataset before every update.
+    # However, mini-batch and SGD were significantly slower as the number of 
+    # iterations increase. In the case of SGD, there is for example one iteration for
+    # every datapoint.
+    #-------------------------------------------------------------------
     
     if train_flag:
         loss_minibatch, acc_minibatch, iter_minibatch = batch_train(X, Y, model, 
